@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>РЕГИНА ПАНТЕРА — pole dance / exotic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Stem:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Stem', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Основной фон с градиентом (виден всегда) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 30%, rgba(30, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 70%),
+                radial-gradient(ellipse at 80% 20%, rgba(60, 0, 0, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 40%, rgba(20, 0, 0, 0.3) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Фоновое изображение (загружается поверх градиента) */
+        .bg-image-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .bg-image-top.loaded {
+            opacity: 1;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.8) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.05s; }
+        .delay-2 { transition-delay: 0.1s; }
+        .delay-3 { transition-delay: 0.15s; }
+        .delay-4 { transition-delay: 0.2s; }
+        .delay-5 { transition-delay: 0.25s; }
+        .delay-6 { transition-delay: 0.3s; }
+        .delay-7 { transition-delay: 0.35s; }
+        .delay-8 { transition-delay: 0.4s; }
+
+        .badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #aaaaaa;
+            letter-spacing: 1.5px;
+            border-left: 3px solid #cc0000;
+            padding-left: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', 'Stem', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0.5rem 0 0.2rem;
+            line-height: 0.9;
+            color: #ffffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .formats {
+            font-family: 'Bebas Neue', 'Stem', sans-serif;
+            font-size: 3.2rem;
+            letter-spacing: 1.5px;
+            margin: 2rem 0 1.5rem;
+        }
+
+        .sub {
+            font-size: 0.8rem;
+            color: #cc0000;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+            line-height: 1.7;
+        }
+
+        .grid-2 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.8rem;
+            transition: 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .grid-2 .card { flex: 1; }
+
+        .card:hover {
+            border-color: rgba(204, 0, 0, 0.5);
+            background: rgba(20, 20, 20, 0.75);
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #cc0000;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.15s;
+            font-family: 'Stem', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .price:hover { color: #ff2222; }
+
+        .price-arrow {
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+            display: inline-block;
+            color: #aaa;
+            font-weight: 700;
+        }
+
+        .price-arrow.open { transform: rotate(180deg); }
+
+        .price-dropdown {
+            display: none;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid #cc0000;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .price-dropdown.open { display: block; }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            font-family: 'Stem', sans-serif;
+            font-weight: 400;
+        }
+
+        .price-table th {
+            background: rgba(20, 20, 20, 0.6);
+            color: #cc0000;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #cc0000;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .price-table td {
+            padding: 10px 8px;
+            border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+            color: #dddddd;
+            font-weight: 400;
+            vertical-align: top;
+        }
+
+        .price-table tr:hover td {
+            background: rgba(25, 25, 25, 0.5);
+            color: #ffffff;
+        }
+
+        .price-table .highlight-cell {
+            color: #cc0000;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .price-main {
+            color: #cc0000;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .price-per-unit {
+            color: #aaa;
+            font-size: 0.65rem;
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+
+        .achievements {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .achievements li {
+            font-size: 0.8rem;
+            font-family: 'Stem', sans-serif;
+            font-weight: 400;
+            border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+            padding: 6px 0;
+            color: #dddddd;
+            letter-spacing: 0.02em;
+            position: relative;
+            padding-left: 75px;
+            text-indent: 0;
+            line-height: 1.5;
+        }
+
+        .year {
+            color: #cc0000;
+            font-weight: 700;
+            font-size: 0.75rem;
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 70px;
+        }
+
+        .contact-block {
+            background: rgba(5, 5, 5, 0.5);
+            border: 1px solid rgba(204, 0, 0, 0.4);
+            padding: 1.8rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .btn-book {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #cc0000;
+            padding: 10px 20px;
+            color: #ffffff;
+            font-family: 'Stem', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.15s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-book:hover {
+            background: #cc0000;
+            color: #000000;
+            border-color: #cc0000;
+        }
+
+        .card-footer { margin-top: auto; }
+
+        .card-title {
+            font-family: 'Bebas Neue', 'Stem', sans-serif;
+            font-size: 1.8rem;
+            margin: 0.5rem 0;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .card-label {
+            color: #bbbbbb;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .card-desc {
+            margin: 0.8rem 0;
+            color: #cccccc;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .staging-note {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dotted rgba(255, 255, 255, 0.1);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .rules-card {
+            max-width: 550px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        .manifest {
+            font-family: 'Rajdhani', 'Stem', sans-serif;
+            font-size: 0.95rem;
+            padding: 1.5rem 1.2rem;
+            font-style: normal;
+            border-left: 3px solid #cc0000;
+            margin: 1.5rem 0;
+            background: rgba(10, 10, 10, 0.35);
+            color: #eeeeee;
+            font-weight: 500;
+            line-height: 1.8;
+            letter-spacing: 0.04em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .rules-text {
+            font-family: 'Rajdhani', 'Stem', sans-serif;
+            margin: 1rem 0;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            line-height: 1.7;
+        }
+
+        .big-number {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #ffffff;
+            vertical-align: baseline;
+            line-height: 1;
+        }
+
+        .footer-stamp {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 2rem;
+            color: #888888;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .highlight-red {
+            color: #cc0000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            display: block;
+            font-family: 'Rajdhani', 'Stem', sans-serif;
+            line-height: 1.5;
+        }
+
+        /* Стили для блока соцсетей с иконками */
+        .social-icons-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .social-icon-link:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-icon-link:hover .social-icon-svg {
+            filter: drop-shadow(0 0 8px rgba(204, 0, 0, 0.5));
+        }
+
+        .social-icon-link:hover .social-icon-circle {
+            stroke: #cc0000;
+        }
+
+        .social-icon-link:hover .social-icon-label {
+            color: #cc0000;
+        }
+
+        .social-icon-svg {
+            width: 48px;
+            height: 48px;
+            transition: filter 0.2s ease;
+        }
+
+        .social-icon-circle {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 1.5;
+            transition: stroke 0.2s ease;
+        }
+
+        .social-icon-path {
+            fill: #ffffff;
+            transition: fill 0.2s ease;
+        }
+
+        .social-icon-link:hover .social-icon-path {
+            fill: #cc0000;
+        }
+
+        .social-icon-label {
+            font-family: 'Rajdhani', 'Stem', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #aaaaaa;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .meta-disclaimer {
+            font-size: 0.6rem;
+            color: #666;
+            margin-top: 1.2rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                line-height: 1.7;
+            }
+            
+            h1 { 
+                font-size: 3rem; 
+                letter-spacing: 1px; 
+                line-height: 1.0;
+            }
+            
+            .formats { 
+                font-size: 2.4rem; 
+                line-height: 1.1;
+            }
+            
+            .grid-2 { flex-direction: column; gap: 1rem; }
+            .grid-3 { grid-template-columns: 1fr; gap: 1rem; }
+            body { padding: 1rem; }
+            .card { padding: 1.2rem; }
+            .price { font-size: 1.6rem; }
+            
+            .achievements { 
+                grid-template-columns: 1fr; 
+                gap: 0.4rem; 
+            }
+            
+            .achievements li { 
+                padding-left: 65px; 
+                line-height: 1.6;
+                padding-top: 7px;
+                padding-bottom: 7px;
+            }
+            
+            .year { width: 60px; font-size: 0.7rem; }
+            
+            .sub { 
+                flex-direction: column; 
+                gap: 0.4rem; 
+                line-height: 1.8;
+            }
+            
+            .contact-block { padding: 1.2rem; }
+            .btn-book { width: 100%; text-align: center; }
+            .card-title { 
+                font-size: 1.5rem; 
+                line-height: 1.3;
+            }
+            
+            .price-table { font-size: 0.7rem; }
+            .price-table th, .price-table td { padding: 8px 6px; }
+            .rules-card { max-width: 100%; }
+            
+            .manifest { 
+                font-size: 0.85rem; 
+                line-height: 1.9;
+            }
+            
+            .rules-text { 
+                font-size: 0.8rem; 
+                line-height: 1.8;
+            }
+            
+            .social-icons-grid { gap: 1.5rem; }
+            .social-icon-svg { width: 40px; height: 40px; }
+            
+            .card-desc {
+                line-height: 1.7;
+            }
+            
+            .card-label {
+                line-height: 1.6;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                line-height: 1.75;
+            }
+            
+            h1 { 
+                font-size: 2.5rem; 
+                line-height: 1.05;
+            }
+            
+            .formats { 
+                font-size: 1.9rem; 
+                line-height: 1.15;
+            }
+            
+            .badge { font-size: 0.6rem; }
+            .card { padding: 1rem; }
+            
+            .price-table { font-size: 0.65rem; }
+            .price-table th, .price-table td { padding: 6px 4px; }
+            
+            .social-icons-grid { gap: 1rem; }
+            .social-icon-svg { width: 36px; height: 36px; }
+            .social-icon-label { font-size: 0.6rem; letter-spacing: 1px; }
+            
+            .achievements li { 
+                padding-left: 60px; 
+                line-height: 1.7;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            
+            .manifest { 
+                font-size: 0.8rem; 
+                line-height: 2.0;
+            }
+            
+            .rules-text { 
+                font-size: 0.75rem; 
+                line-height: 1.9;
+            }
+            
+            .card-desc {
+                line-height: 1.75;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-image-top" id="bgImage"></div>
+    <div class="bg-overlay"></div>
+
+<div class="container">
+
+    <div class="badge fade-up delay-1"></div>
+    <h1 class="fade-up delay-2">РЕГИНА<br>ПАНТЕРА</h1>
+    <div class="sub fade-up delay-3">
+        <span>★ POLE DANCE | EXOTIC | МНОГОКРАТНЫЙ ЧЕМПИОН РОССИИ И АЗИИ</span>
+        <span>МОСКВА</span>
+    </div>
+
+    <div class="manifest fade-up delay-3">
+        Со мной ты научишься чувствовать музыку и выражать себя в танце<br>
+        На моих тренировках ты получишь достаточную силовую нагрузку<br>
+        17 лет танцую, 9 лет занимаюсь пилоном и воздушной акробатикой<br>
+        Веду классы в разных городах России, являюсь действующим судьей топовых чемпов и баттлов
+    </div>
+
+    <h1 class="formats fade-up delay-1">ФОРМАТЫ РАБОТЫ СО МНОЙ</h1>
+
+    <div class="card fade-up delay-3" style="margin-bottom: 2rem;">
+        <div class="card-label">ОФФЛАЙН / ОНЛАЙН</div>
+        <div class="card-title">ПЕРСОНАЛЬНЫЕ ТРЕНИРОВКИ</div>
+        <div class="card-desc">Хореография и трюки под ваш запрос, подготовка к баттлам</div>
+        
+        <div class="price" onclick="toggleDropdown('price-pers')">
+            от 3 600 ₽
+            <span class="price-arrow" id="arrow-pers">▼</span>
+        </div>
+        
+        <div class="price-dropdown" id="dropdown-pers">
+            <table class="price-table">
+                <thead>
+                    <tr><th>Кол-во</th><th>Оффлайн</th><th>Онлайн</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Пробная</td><td class="highlight-cell">4 400 ₽</td><td class="highlight-cell">3 600 ₽</td></tr>
+                    <tr><td>Разовая</td><td class="highlight-cell">5 000 ₽</td><td class="highlight-cell">4 200 ₽</td></tr>
+                    <tr>
+                        <td>4</td>
+                        <td><span class="price-main">18 000 ₽</span><span class="price-per-unit">4 500 ₽ / шт</span></td>
+                        <td><span class="price-main">14 800 ₽</span><span class="price-per-unit">3 700 ₽ / шт</span></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><span class="price-main">34 000 ₽</span><span class="price-per-unit">4 250 ₽ / шт</span></td>
+                        <td><span class="price-main">27 600 ₽</span><span class="price-per-unit">3 450 ₽ / шт</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">60 мин | студия Москва / Яндекс Телемост</div>
+        <div class="card-footer">
+            <a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ЗАПИСАТЬСЯ →</a>
+        </div>
+    </div>
+
+    <div class="grid-3">
+        <div class="card fade-up delay-4">
+            <div class="card-label">★ ОФФЛАЙН / ОНЛАЙН</div>
+            <div class="card-title">СПЛИТ-ТРЕНИРОВКИ</div>
+            <div class="card-desc">Работаем с любым вашим запросом</div>
+            <div class="price" onclick="toggleDropdown('price-split')">от 6 200 ₽ <span class="price-arrow" id="arrow-split">▼</span></div>
+            <div class="price-dropdown" id="dropdown-split">
+                <table class="price-table">
+                    <thead><tr><th>Кол-во</th><th>2 чел</th><th>3 чел</th></tr></thead>
+                    <tbody>
+                        <tr><td>Оффлайн</td><td class="highlight-cell">7 000 ₽</td><td class="highlight-cell">10 000 ₽</td></tr>
+                        <tr><td>Онлайн</td><td class="highlight-cell">6 200 ₽</td><td class="highlight-cell">9 200 ₽</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">60 мин | онлайн / офлайн</div>
+            <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ЗАПИСАТЬСЯ →</a></div>
+        </div>
+
+        <div class="card fade-up delay-5">
+            <div class="card-label">★ ДЛЯ СЦЕНЫ</div>
+            <div class="card-title">ПОСТАНОВКА НОМЕРА ПОД КЛЮЧ</div>
+            <div class="card-desc">Совместный подбор трека и образа, постановка хореографии и трюков, чистка номера</div>
+            <div class="price" onclick="toggleDropdown('price-staging')">от 37 000 ₽ <span class="price-arrow" id="arrow-staging">▼</span></div>
+            <div class="price-dropdown" id="dropdown-staging">
+                <table class="price-table">
+                    <thead><tr><th></th><th>Оффлайн</th><th>Онлайн</th></tr></thead>
+                    <tbody><tr><td>Под ключ</td><td class="highlight-cell">47 000 ₽</td><td class="highlight-cell">37 000 ₽</td></tr></tbody>
+                </table>
+                <div class="staging-note" style="padding: 10px 8px;">Входит 10 персоналок + онлайн связь</div>
+            </div>
+            <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">10 занятий | онлайн / офлайн<br>* в стоимость входит аренда зала</div>
+            <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ЗАПИСАТЬСЯ →</a></div>
+        </div>
+
+        <div class="card fade-up delay-6">
+            <div class="card-label">★ ОНЛАЙН</div>
+            <div class="card-title">РАЗБОР ХОРЕОГРАФИЙ</div>
+            <div class="card-desc">Онлайн видеоразбор моих хореографий</div>
+            <div class="price" style="cursor: default;">от 1 390 ₽</div>
+            <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">видеоразбор | Telegram</div>
+            <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ПРИОБРЕСТИ →</a></div>
+        </div>
+    </div>
+
+    <hr class="fade-up delay-3">
+
+    <div class="badge fade-up delay-3">★ ДОСТИЖЕНИЯ</div>
+    <div class="fade-up delay-4" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px;">
+        <h2 style="font-family: 'Bebas Neue', 'Stem', sans-serif; font-size: 2rem; font-weight: 400; letter-spacing: 1px;">МНОГОКРАТНЫЙ ЧЕМПИОН РОССИИ И АЗИИ</h2>
+    </div>
+    
+    <ul class="achievements fade-up delay-5">
+        <li><span class="year">2026</span> 2 place Revolution Asia'2026 profi</li>
+        <li><span class="year">2025</span> 1 place ExoBall'2025 allstyles</li>
+        <li><span class="year">2025</span> 2 place BadnessBattle'2025 russianstyle</li>
+        <li><span class="year">2025</span> 1 place PoleFight'2025 profi</li>
+        <li><span class="year">2024</span> 2 place ExoBattle'2024 special</li>
+        <li><span class="year">2024</span> 2 place ExoBattle'2024 profi</li>
+        <li><span class="year">2024</span> 2 place BadnessBattle'2024 special</li>
+        <li><span class="year">2023</span> 1 place Zodiac'2023 semi pro</li>
+        <li><span class="year">2023</span> 1 place Exotic Generation Best Sensuality'2023 profi</li>
+        <li><span class="year">2023</span> 2 place ExoBattle'2023 profi</li>
+        <li><span class="year">2023</span> 3 place Poleexotic Kazan'2023 profi</li>
+        <li><span class="year">2022</span> 3 place ExoBattle'2022 semi pro</li>
+        <li><span class="year">2021</span> 1 place Poleerotic Kazan'2021 profi</li>
+        <li><span class="year">2019</span> 3 place Poleartistic Kazan'2019 profi</li>
+        <li><span class="year">2019</span> 1 place Poleartistic Kazan'2019 profi</li>
+        <li><span class="year">2017</span> 1 place Poleartistic Kazan'2017 profi</li>
+        <li><span class="year">2017</span> 3 place Poleartistic Kazan'2017 amateur</li>
+    </ul>
+
+    <hr class="fade-up delay-3">
+
+    <div class="card rules-card fade-up delay-6">
+        <div class="highlight-red">ПРАВИЛА ЗАПИСИ</div>
+        <div class="rules-text">запись производится по предоплате</div>
+        <div class="rules-text">при отмене менее, чем за <span class="big-number">24</span>ч предоплата не возвращается</div>
+    </div>
+
+    <div class="contact-block fade-up delay-7">
+        <div style="letter-spacing: 2px; color:#cc0000; font-weight: 600; text-transform: uppercase; font-family: 'Rajdhani', 'Stem', sans-serif; font-size: 0.95rem; line-height: 1.5;">ДЛЯ ЗАПИСИ ПИШИ В ДИРЕКТ</div>
+        
+        <!-- Блок с иконками соцсетей -->
+        <div class="social-icons-grid">
+            <!-- Instagram -->
+            <a href="https://instagram.com/reji_pantera" target="_blank" class="social-icon-link">
+                <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
+                    <rect x="12" y="12" width="24" height="24" rx="6" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+                    <circle cx="24" cy="24" r="6" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+                    <circle cx="31" cy="17" r="1.5" fill="#ffffff"/>
+                </svg>
+                <span class="social-icon-label">Instagram</span>
+            </a>
+
+            <!-- Telegram -->
+            <a href="https://t.me/reji_pantera" target="_blank" class="social-icon-link">
+                <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
+                    <path class="social-icon-path" d="M33.5 13.5L12.5 22.5L19.5 25.5L22.5 32L25.5 25.5L33.5 29.5L33.5 13.5Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+                    <line x1="19.5" y1="25.5" x2="33.5" y2="15" stroke="#ffffff" stroke-width="1.8"/>
+                </svg>
+                <span class="social-icon-label">Telegram</span>
+            </a>
+
+            <!-- VK -->
+            <a href="https://vk.com/xassann" target="_blank" class="social-icon-link">
+                <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
+                    <path class="social-icon-path" d="M25.5 33C18.5 33 14.5 28.2 14.5 20H18C18 26 20.5 28.6 22.5 29.2V20H26V25.2C28 25 30 22.6 30.7 20H34.2C33.7 23.2 31.3 25.6 29.8 26.6C31.3 27.4 34 29.5 35 33H31.3C30.4 30.2 28.2 28 26 27.7V33H25.5Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+                <span class="social-icon-label">VK</span>
+            </a>
+        </div>
+
+        <div class="meta-disclaimer">
+            *деятельность организации Meta (Instagram) запрещена на территории РФ
+        </div>
+    </div>
+
+    <div class="footer-stamp fade-up delay-8">
+        ★ РЕГИНА ПАНТЕРА ★ © 2026
+    </div>
+</div>
+
+<script>
+    // Загружаем фоновое изображение
+    const bgImage = document.getElementById('bgImage');
+    
+    const img = new Image();
+    img.onload = function() {
+        bgImage.style.backgroundImage = "url('IMG_4510.jpg')";
+        bgImage.classList.add('loaded');
+    };
+    
+    img.onerror = function() {
+        // Если изображение не загрузилось, оставляем градиентный фон
+        console.log('Фоновое изображение не найдено, используется градиентный фон');
+    };
+    
+    // Запускаем загрузку
+    img.src = 'IMG_4510.jpg';
+
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById('dropdown-' + id.split('-')[1]);
+        const arrow = document.getElementById('arrow-' + id.split('-')[1]);
+        if (dropdown && arrow) {
+            dropdown.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+    }
+
+    (function() {
+        const animatedElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+
+        animatedElements.forEach(el => observer.observe(el));
+
+        setTimeout(() => {
+            animatedElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                if (rect.top < windowHeight && rect.bottom > 0) {
+                    el.classList.add('visible');
+                    observer.unobserve(el);
+                }
+            });
+        }, 100);
+    })();
+</script>
+
+</body>
+</html>
