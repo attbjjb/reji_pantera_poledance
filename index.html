@@ -28,7 +28,7 @@
             min-height: 100vh;
         }
 
-        /* Основной фон с градиентом (виден всегда) */
+        /* Основной фон с градиентом */
         body::before {
             content: '';
             position: fixed;
@@ -44,7 +44,6 @@
             pointer-events: none;
         }
 
-        /* Фоновое изображение (загружается поверх градиента) */
         .bg-image-top {
             position: fixed;
             top: 0;
@@ -151,6 +150,53 @@
             line-height: 1.7;
         }
 
+        /* Секции-факты (без циферок) */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2.5rem 0 3rem 0;
+        }
+
+        .pillar-card {
+            background: rgba(12, 12, 12, 0.55);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: default;
+        }
+
+        .pillar-card:hover {
+            border-color: rgba(204, 0, 0, 0.5);
+            background: rgba(20, 20, 20, 0.7);
+            transform: translateY(-5px);
+        }
+
+        .pillar-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #e0e0e0;
+            font-family: 'Rajdhani', 'Stem', sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        /* Декоративная линия вместо номера */
+        .pillar-decoration {
+            width: 30px;
+            height: 2px;
+            background: #cc0000;
+            margin: 0 auto 1rem auto;
+            transition: width 0.2s ease;
+        }
+
+        .pillar-card:hover .pillar-decoration {
+            width: 45px;
+        }
+
         .grid-2 {
             display: flex;
             flex-wrap: wrap;
@@ -202,7 +248,7 @@
 
         .price-arrow {
             font-size: 0.9rem;
-            transition: transform 0.2s;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             display: inline-block;
             color: #aaa;
             font-weight: 700;
@@ -211,8 +257,10 @@
         .price-arrow.open { transform: rotate(180deg); }
 
         .price-dropdown {
-            display: none;
-            background: rgba(10, 10, 10, 0.8);
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: rgba(10, 10, 10, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-top: 2px solid #cc0000;
             margin-top: 0.5rem;
@@ -220,7 +268,13 @@
             overflow: hidden;
         }
 
-        .price-dropdown.open { display: block; }
+        .price-dropdown.open {
+            grid-template-rows: 1fr;
+        }
+
+        .price-dropdown > .dropdown-inner {
+            overflow: hidden;
+        }
 
         .price-table {
             width: 100%;
@@ -393,22 +447,6 @@
             font-weight: 500;
         }
 
-        .manifest {
-            font-family: 'Rajdhani', 'Stem', sans-serif;
-            font-size: 0.95rem;
-            padding: 1.5rem 1.2rem;
-            font-style: normal;
-            border-left: 3px solid #cc0000;
-            margin: 1.5rem 0;
-            background: rgba(10, 10, 10, 0.35);
-            color: #eeeeee;
-            font-weight: 500;
-            line-height: 1.8;
-            letter-spacing: 0.04em;
-            position: relative;
-            z-index: 2;
-        }
-
         .rules-text {
             font-family: 'Rajdhani', 'Stem', sans-serif;
             margin: 1rem 0;
@@ -451,7 +489,6 @@
             line-height: 1.5;
         }
 
-        /* Стили для блока соцсетей с иконками */
         .social-icons-grid {
             display: flex;
             justify-content: center;
@@ -527,6 +564,40 @@
             line-height: 1.5;
         }
 
+        /* стили для списка цен на видеоразборы */
+        .video-prices-list {
+            list-style: none;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .video-prices-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 5px 8px;
+            font-size: 0.75rem;
+            border-bottom: 1px dotted rgba(255,255,255,0.1);
+            color: #ddd;
+            font-family: 'Stem', sans-serif;
+        }
+        .video-prices-list li span:first-child {
+            font-weight: 500;
+        }
+        .video-prices-list li span:last-child {
+            color: #cc0000;
+            font-weight: 600;
+        }
+
+        @media (max-width: 780px) {
+            .pillars-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .pillar-card {
+                padding: 1rem;
+            }
+        }
+
         @media (max-width: 700px) {
             body {
                 line-height: 1.7;
@@ -580,11 +651,6 @@
             .price-table th, .price-table td { padding: 8px 6px; }
             .rules-card { max-width: 100%; }
             
-            .manifest { 
-                font-size: 0.85rem; 
-                line-height: 1.9;
-            }
-            
             .rules-text { 
                 font-size: 0.8rem; 
                 line-height: 1.8;
@@ -634,11 +700,6 @@
                 padding-bottom: 8px;
             }
             
-            .manifest { 
-                font-size: 0.8rem; 
-                line-height: 2.0;
-            }
-            
             .rules-text { 
                 font-size: 0.75rem; 
                 line-height: 1.9;
@@ -646,6 +707,11 @@
             
             .card-desc {
                 line-height: 1.75;
+            }
+            
+            .pillars-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
             }
         }
     </style>
@@ -664,11 +730,24 @@
         <span>МОСКВА</span>
     </div>
 
-    <div class="manifest fade-up delay-3">
-        Со мной ты научишься чувствовать музыку и выражать себя в танце<br>
-        На моих тренировках ты получишь достаточную силовую нагрузку<br>
-        17 лет танцую, 9 лет занимаюсь пилоном и воздушной акробатикой<br>
-        Веду классы в разных городах России, являюсь действующим судьей топовых чемпов и баттлов
+    <!-- Блок фактов (без нумерации) с декоративной чертой -->
+    <div class="pillars-grid fade-up delay-3">
+        <div class="pillar-card">
+            <div class="pillar-decoration"></div>
+            <div class="pillar-text">Чувствовать музыку и выражать себя в танце</div>
+        </div>
+        <div class="pillar-card">
+            <div class="pillar-decoration"></div>
+            <div class="pillar-text">Достаточная силовая нагрузка на тренировках</div>
+        </div>
+        <div class="pillar-card">
+            <div class="pillar-decoration"></div>
+            <div class="pillar-text">17 лет танцую, 9 лет на пилоне и воздушной акробатике</div>
+        </div>
+        <div class="pillar-card">
+            <div class="pillar-decoration"></div>
+            <div class="pillar-text">Классы по всей России, судья топовых чемпов и баттлов</div>
+        </div>
     </div>
 
     <h1 class="formats fade-up delay-1">ФОРМАТЫ РАБОТЫ СО МНОЙ</h1>
@@ -684,25 +763,17 @@
         </div>
         
         <div class="price-dropdown" id="dropdown-pers">
-            <table class="price-table">
-                <thead>
-                    <tr><th>Кол-во</th><th>Оффлайн</th><th>Онлайн</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Пробная</td><td class="highlight-cell">4 400 ₽</td><td class="highlight-cell">3 600 ₽</td></tr>
-                    <tr><td>Разовая</td><td class="highlight-cell">5 000 ₽</td><td class="highlight-cell">4 200 ₽</td></tr>
-                    <tr>
-                        <td>4</td>
-                        <td><span class="price-main">18 000 ₽</span><span class="price-per-unit">4 500 ₽ / шт</span></td>
-                        <td><span class="price-main">14 800 ₽</span><span class="price-per-unit">3 700 ₽ / шт</span></td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td><span class="price-main">34 000 ₽</span><span class="price-per-unit">4 250 ₽ / шт</span></td>
-                        <td><span class="price-main">27 600 ₽</span><span class="price-per-unit">3 450 ₽ / шт</span></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="dropdown-inner">
+                <table class="price-table">
+                    <thead><tr><th>Кол-во</th><th>Оффлайн</th><th>Онлайн</th></tr></thead>
+                    <tbody>
+                        <tr><td>Пробная</td><td class="highlight-cell">4 400 ₽</td><td class="highlight-cell">3 600 ₽</td></tr>
+                        <tr><td>Разовая</td><td class="highlight-cell">5 000 ₽</td><td class="highlight-cell">4 200 ₽</td></tr>
+                        <tr><td>4</td><td><span class="price-main">18 000 ₽</span><span class="price-per-unit">4 500 ₽ / шт</span></td><td><span class="price-main">14 800 ₽</span><span class="price-per-unit">3 700 ₽ / шт</span></td></tr>
+                        <tr><td>8</td><td><span class="price-main">34 000 ₽</span><span class="price-per-unit">4 250 ₽ / шт</span></td><td><span class="price-main">27 600 ₽</span><span class="price-per-unit">3 450 ₽ / шт</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
         <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">60 мин | студия Москва / Яндекс Телемост</div>
@@ -718,13 +789,15 @@
             <div class="card-desc">Работаем с любым вашим запросом</div>
             <div class="price" onclick="toggleDropdown('price-split')">от 6 200 ₽ <span class="price-arrow" id="arrow-split">▼</span></div>
             <div class="price-dropdown" id="dropdown-split">
-                <table class="price-table">
-                    <thead><tr><th>Кол-во</th><th>2 чел</th><th>3 чел</th></tr></thead>
-                    <tbody>
-                        <tr><td>Оффлайн</td><td class="highlight-cell">7 000 ₽</td><td class="highlight-cell">10 000 ₽</td></tr>
-                        <tr><td>Онлайн</td><td class="highlight-cell">6 200 ₽</td><td class="highlight-cell">9 200 ₽</td></tr>
-                    </tbody>
-                </table>
+                <div class="dropdown-inner">
+                    <table class="price-table">
+                        <thead><tr><th>Кол-во</th><th>2 чел</th><th>3 чел</th></tr></thead>
+                        <tbody>
+                            <tr><td>Оффлайн</td><td class="highlight-cell">7 000 ₽</td><td class="highlight-cell">10 000 ₽</td></tr>
+                            <tr><td>Онлайн</td><td class="highlight-cell">6 200 ₽</td><td class="highlight-cell">9 200 ₽</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">60 мин | онлайн / офлайн</div>
             <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ЗАПИСАТЬСЯ →</a></div>
@@ -736,11 +809,13 @@
             <div class="card-desc">Совместный подбор трека и образа, постановка хореографии и трюков, чистка номера</div>
             <div class="price" onclick="toggleDropdown('price-staging')">от 37 000 ₽ <span class="price-arrow" id="arrow-staging">▼</span></div>
             <div class="price-dropdown" id="dropdown-staging">
-                <table class="price-table">
-                    <thead><tr><th></th><th>Оффлайн</th><th>Онлайн</th></tr></thead>
-                    <tbody><tr><td>Под ключ</td><td class="highlight-cell">47 000 ₽</td><td class="highlight-cell">37 000 ₽</td></tr></tbody>
-                </table>
-                <div class="staging-note" style="padding: 10px 8px;">Входит 10 персоналок + онлайн связь</div>
+                <div class="dropdown-inner">
+                    <table class="price-table">
+                        <thead><tr><th></th><th>Оффлайн</th><th>Онлайн</th></tr></thead>
+                        <tbody><tr><td>Под ключ</td><td class="highlight-cell">47 000 ₽</td><td class="highlight-cell">37 000 ₽</td></tr></tbody>
+                    </table>
+                    <div class="staging-note" style="padding: 10px 8px;">Входит 10 персоналок + онлайн связь</div>
+                </div>
             </div>
             <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">10 занятий | онлайн / офлайн<br>* в стоимость входит аренда зала</div>
             <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ЗАПИСАТЬСЯ →</a></div>
@@ -750,7 +825,25 @@
             <div class="card-label">★ ОНЛАЙН</div>
             <div class="card-title">РАЗБОР ХОРЕОГРАФИЙ</div>
             <div class="card-desc">Онлайн видеоразбор моих хореографий</div>
-            <div class="price" style="cursor: default;">от 1 390 ₽</div>
+            <div class="price" style="cursor: pointer;" onclick="toggleDropdown('price-video')">
+                от 1 390 ₽ <span class="price-arrow" id="arrow-video">▼</span>
+            </div>
+            <div class="price-dropdown" id="dropdown-video">
+                <div class="dropdown-inner">
+                    <ul class="video-prices-list">
+                        <li><span>1 видео</span><span>1 390 ₽</span></li>
+                        <li><span>2 видео</span><span>1 790 ₽</span></li>
+                        <li><span>3 видео</span><span>2 190 ₽</span></li>
+                        <li><span>4 видео</span><span>2 590 ₽</span></li>
+                        <li><span>5 видео</span><span>2 990 ₽</span></li>
+                        <li><span>6 видео</span><span>3 390 ₽</span></li>
+                        <li><span>7 видео</span><span>3 790 ₽</span></li>
+                        <li><span>8 видео</span><span>4 190 ₽</span></li>
+                        <li><span>9 видео</span><span>4 590 ₽</span></li>
+                    </ul>
+                    <div style="font-size: 0.65rem; color:#aaa; padding: 6px 8px;">видеоразбор | Telegram</div>
+                </div>
+            </div>
             <div style="font-size: 0.7rem; color:#bbb; margin-bottom: 10px; font-weight: 600; line-height: 1.5;">видеоразбор | Telegram</div>
             <div class="card-footer"><a href="https://instagram.com/reji_pantera" target="_blank" class="btn-book">ПРИОБРЕСТИ →</a></div>
         </div>
@@ -794,9 +887,7 @@
     <div class="contact-block fade-up delay-7">
         <div style="letter-spacing: 2px; color:#cc0000; font-weight: 600; text-transform: uppercase; font-family: 'Rajdhani', 'Stem', sans-serif; font-size: 0.95rem; line-height: 1.5;">ДЛЯ ЗАПИСИ ПИШИ В ДИРЕКТ</div>
         
-        <!-- Блок с иконками соцсетей -->
         <div class="social-icons-grid">
-            <!-- Instagram -->
             <a href="https://instagram.com/reji_pantera" target="_blank" class="social-icon-link">
                 <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
@@ -807,7 +898,6 @@
                 <span class="social-icon-label">Instagram</span>
             </a>
 
-            <!-- Telegram -->
             <a href="https://t.me/reji_pantera" target="_blank" class="social-icon-link">
                 <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
@@ -817,7 +907,6 @@
                 <span class="social-icon-label">Telegram</span>
             </a>
 
-            <!-- VK -->
             <a href="https://vk.com/xassann" target="_blank" class="social-icon-link">
                 <svg class="social-icon-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <rect class="social-icon-circle" x="2" y="2" width="44" height="44" rx="12" />
@@ -838,26 +927,37 @@
 </div>
 
 <script>
-    // Загружаем фоновое изображение
     const bgImage = document.getElementById('bgImage');
-    
     const img = new Image();
     img.onload = function() {
         bgImage.style.backgroundImage = "url('IMG_4510.jpg')";
         bgImage.classList.add('loaded');
     };
-    
     img.onerror = function() {
-        // Если изображение не загрузилось, оставляем градиентный фон
         console.log('Фоновое изображение не найдено, используется градиентный фон');
     };
-    
-    // Запускаем загрузку
     img.src = 'IMG_4510.jpg';
 
-    function toggleDropdown(id) {
-        const dropdown = document.getElementById('dropdown-' + id.split('-')[1]);
-        const arrow = document.getElementById('arrow-' + id.split('-')[1]);
+    function toggleDropdown(priceId) {
+        let dropdownId, arrowId;
+        if (priceId === 'price-pers') {
+            dropdownId = 'dropdown-pers';
+            arrowId = 'arrow-pers';
+        } else if (priceId === 'price-split') {
+            dropdownId = 'dropdown-split';
+            arrowId = 'arrow-split';
+        } else if (priceId === 'price-staging') {
+            dropdownId = 'dropdown-staging';
+            arrowId = 'arrow-staging';
+        } else if (priceId === 'price-video') {
+            dropdownId = 'dropdown-video';
+            arrowId = 'arrow-video';
+        } else {
+            return;
+        }
+        
+        const dropdown = document.getElementById(dropdownId);
+        const arrow = document.getElementById(arrowId);
         if (dropdown && arrow) {
             dropdown.classList.toggle('open');
             arrow.classList.toggle('open');
